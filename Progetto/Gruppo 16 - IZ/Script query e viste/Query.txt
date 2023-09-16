@@ -1,0 +1,79 @@
+---------------------------------------------------------------------------------------------------------------------------7.1.------------------------------------------------------------------------------------------------------------
+Select Societa.Denominazione as NomeFornitore, Societa.telefono as TelefonoFornitore, Societa.Indirizzo as IndirizzoS, Societa.Cap as Cap, 
+	   Disciplina.nome as Disciplina, count(*) as Quantita, min(Servizio.costo) as Minimo, 
+	   max(servizio.costo) as Massimo, round((avg(Servizio.Costo)),2) as Media
+From Societa join PropostaSocieta on (Societa.CF= PropostaSocieta.Societa) 
+			 join Servizio on(PropostaSocieta.Servizio = Servizio.Codice) 
+			 join Disciplina on (Servizio.Disciplina = disciplina.id)
+Group by NomeFornitore, TelefonoFornitore,IndirizzoS, Cap, Disciplina,nome
+Union
+Select Professionista.Cognome as NomeFornitore, Professionista.Telefono as TelefonoFornitore, Professionista.Indirizzo as IndirizzoS, Professionista.Cap as Cap,
+	   Disciplina.nome as Disciplina, count(*) as Quantita, min(Servizio.costo) as Minimo, 
+	   max(servizio.costo) as Massimo, round((avg(Servizio.Costo)),2) as Media
+From Professionista join PropostaProfessionista on (Professionista.CF= PropostaProfessionista.Professionista) 
+					join Servizio on(PropostaProfessionista.Servizio = Servizio.Codice) 
+					join Disciplina on (Servizio.Disciplina = disciplina.id)
+Group by NomeFornitore, TelefonoFornitore,IndirizzoS, Cap, Disciplina.nome
+
+---------------------------------------------------------------------------------------------------------------------------7.2.------------------------------------------------------------------------------------------------------------
+SELECT Username as UtenteInvitato
+FROM Utente
+where exists (select * from Invito, Acquisto, Servizio, Disciplina, Utente U
+		 where Invito.UtenteInvitato = Utente.CF AND Invito.Acquisto = Acquisto.ID
+		 AND Acquisto.Servizio = Servizio.Codice AND Servizio.disciplina = disciplina.ID
+		 AND U.CF = Acquisto.Utente AND disciplina.nome = 'Calcio a 11' AND Servizio.data = '2021-05-14'
+		 AND U.Nome ='Francesca' AND U.Cognome = 'Fortunato' AND Invito.Esito = 'Accettato');
+
+---------------------------------------------------------------------------------------------------------------------------7.3.------------------------------------------------------------------------------------------------------------
+Select distinct Denominazione
+From Societa                                                                                                                                                       
+where Denominazione not in  --Poi trovo tutte quelle che offrono il calcio 
+						   (Select s1.denominazione 
+							From PropostaSocieta ps join Servizio s on (s.codice = ps.servizio)
+					   								join Societa s1 on (s1.cf=ps.societa)
+													join Disciplina D on (D.ID = S.Disciplina)
+													where D.nome like 'Calcio a %')
+UNION
+Select Cognome
+from Professionista
+where Cognome not in  --Poi trovo tutte quelle che offrono il calcio 
+						   (Select p1.cognome 
+							From PropostaProfessionista ps join Servizio s on (s.codice = ps.servizio)
+														   join Professionista p1 on (p1.cf=ps.professionista)
+														   join Disciplina D on (D.ID = S.Disciplina)
+														   where D.nome like 'Calcio a %')
+
+---------------------------------------------------------------------------------------------------------------------------7.4.1.------------------------------------------------------------------------------------------------------------
+Select SN.Denominazione from(
+                        Select S.denominazione, count(*) as NumServizi
+                        FROM Societa S, PropostaSocieta PS, Servizio Se
+                        Where S.CF=PS.Societa AND PS.Servizio = Se.codice
+                        Group By S.denominazione) as SN
+WHERE SN.NumServizi >= 3
+
+INTERSECT
+Select distinct Denominazione
+From Societa                                                                                                                                                       
+where Denominazione not in  --Poi trovo tutte quelle che offrono il calcio 
+						   (Select s1.denominazione 
+							From PropostaSocieta ps join Servizio s on (s.codice = ps.servizio)
+					   								join Societa s1 on (s1.cf=ps.societa)
+													join Disciplina D on (D.ID = S.Disciplina)
+													where D.nome like 'Calcio a %')
+
+
+select S.Denominazione
+from Societa S, PropostaSocieta PS, Servizio Se, Disciplina D
+where S.CF = PS.Societa and PS.Servizio = Se.Codice and Se.Disciplina = D.ID and D.Nome <> 'Calcio a 11'
+group by S.Denominazione 
+having count(*) >=3
+
+
+specifica che la riga soddisfa la condizione se 
+
+
+
+
+
+
+

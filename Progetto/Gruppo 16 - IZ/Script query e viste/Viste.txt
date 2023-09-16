@@ -1,0 +1,43 @@
+----------------------------------------------------------------------------------------------------------------------------8.1.------------------------------------------------------------------------------------------------------------
+Create view Voga as
+SELECT disciplina.nome, count(disciplina.nome) as numVendite
+FROM Acquisto, Servizio, Disciplina
+WHERE Acquisto.servizio = servizio.codice AND servizio.disciplina=disciplina.id 
+Group by disciplina.nome
+
+Select nome, numVendite
+From Voga	
+Where numVendite = (Select max(numVendite)
+			        From Voga)	
+
+----------------------------------------------------------------------------------------------------------------------------8.2.------------------------------------------------------------------------------------------------------------
+create view NumeroAcquisti as 
+select A.Utente,U.Nome,U.Cognome,count(*) as QuantitaAcquistate
+from Acquisto A join Utente U on (U.CF = A.Utente)
+group by A.Utente,U.Nome, U.Cognome
+
+select * from NumeroAcquisti 
+where QuantitaAcquistate = (select max(QuantitaAcquistate)
+						   from NumeroAcquisti)
+
+----------------------------------------------------------------------------------------------------------------------------8.3.------------------------------------------------------------------------------------------------------------
+Create View ProfCooperanti (CognomeProf, NomeProf, CellProf, NomeSocieta) as
+Select distinct p.Cognome, p.Nome, p.Telefono, s.denominazione
+From professionista p join cooperazione c on p.CF=c.professionista
+	join societa s on c.societa=s.CF;
+
+Select NomeSocieta
+from ProfCooperanti
+where CognomeProf='Morriello';
+
+Create View NumeroProf as
+Select NomeSocieta, count(CognomeProf) as NumeroProfessionisti
+From ProfCooperanti
+group by NomeSocieta;
+
+select NomeSocieta
+from NumeroProf
+where NumeroProfessionisti=1;
+
+
+

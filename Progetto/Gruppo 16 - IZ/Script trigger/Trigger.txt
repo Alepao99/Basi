@@ -1,0 +1,99 @@
+DROP FUNCTION Check_username_utente() cascade;
+DROP FUNCTION Check_username_Professionista() cascade;
+DROP FUNCTION Check_username_Societa() cascade;
+DROP FUNCTION insert_PropostaSocieta() cascade;
+DROP FUNCTION check_Acquisti() cascade;
+DROP FUNCTION check_Invito() cascade;
+---------------------------------------------------------------------------------------------------------------------------9.1.1.------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION Check_username_utente() returns trigger as $$
+BEGIN
+if (exists(select*from Societa where username =new.username) or exists(select*from Professionista where username =new.username)) then
+raise exception 'Username esistente';
+end if;
+Return new;
+END
+$$ Language plpgsql;
+
+CREATE TRIGGER check_insert_usernameUtente
+BEFORE INSERT ON UTENTE
+FOR EACH ROW EXECUTE PROCEDURE Check_username_utente();
+
+---------------------------------------------------------------------------------------------------------------------------9.1.2.------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION Check_username_Professionista() returns trigger as $$
+BEGIN
+if (exists(select*from Societa where username =new.username) or exists(select*from Utente where username =new.username)) then
+raise exception 'Username esistente';
+end if;
+Return new;
+END
+$$ Language plpgsql;
+
+CREATE TRIGGER check_insert_usernameProfessionista
+BEFORE INSERT ON Professionista
+FOR EACH ROW EXECUTE PROCEDURE Check_username_Professionista();
+
+---------------------------------------------------------------------------------------------------------------------------9.1.3.------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION Check_username_Societa() returns trigger as $$
+BEGIN
+if (exists(select*from Utente where username =new.username) or exists(select*from Professionista where username =new.username)) then
+raise exception 'Username esistente';
+end if;
+Return new;
+END
+$$ Language plpgsql;
+
+CREATE TRIGGER check_insert_usernameSocieta
+BEFORE INSERT ON Societa
+FOR EACH ROW EXECUTE PROCEDURE Check_username_Societa();
+
+---------------------------------------------------------------------------------------------------------------------------9.1.4.------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION insert_PropostaSocieta() returns trigger as $$
+BEGIN
+select Servizio, Societa into new.Servizio, new.Societa from newTab;
+INSERT into PropostaSocieta values (new.Servizio, new.Societa);
+RETURN NULL;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER Popolamento_PropostaSocieta
+AFTER INSERT ON Cooperazione
+REFERENCING NEW TABLE as newTab FOR EACH STATEMENT 
+EXECUTE PROCEDURE insert_PropostaSocieta();
+
+---------------------------------------------------------------------------------------------------------------------------9.2.1.------------------------------------------------------------------------------------------------------------
+DROP FUNCTION check_Acquisti() cascade;
+Create function check_Acquisti() RETURNS trigger as $$
+Begin
+if(((Select Servizio.numeroposti 
+	from Servizio 
+	where new.servizio=Servizio.codice)=(Select count(*) from Acquisto where Acquisto.servizio = new.servizio)) and ((Select Servizio.data	from Servizio where new.servizio=Servizio.codice) <= new.Data)) then raise Exception 'Numero posti terminati e servizio scaduto'; 
+	end if;
+if((Select Servizio.numeroposti 
+	from Servizio 
+	where new.servizio=Servizio.codice)=(Select count(*) from Acquisto where Acquisto.servizio = new.servizio)) then raise Exception 'Numero posti Terminati'; 
+	end if;
+if((Select Servizio.data
+	from Servizio 
+	where new.servizio=Servizio.codice) <= new.Data) then raise Exception 'Servizio Scaduto'; 
+	end if;
+RETURN new;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_inserimentoAcquisto
+BEFORE INSERT ON ACQUISTO
+
+---------------------------------------------------------------------------------------------------------------------------9.2.2.------------------------------------------------------------------------------------------------------------
+DROP FUNCTION check_Invito() cascade;
+Create function check_Invito() RETURNS trigger as $$
+Begin
+if((SELECT Servizio.Condiviso From Acquisto, Servizio Where new.acquisto=acquisto.id AND acquisto.servizio=Servizio.codice)='false')
+then raise Exception 'Servizio non codivisibile';
+end if;
+RETURN new;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_inserimentoInvito
+BEFORE INSERT ON Invito
+FOR EACH ROW EXECUTE procedure check_Invito();

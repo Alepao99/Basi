@@ -1,0 +1,308 @@
+<Project name="SportClub">
+<ConceptualSchema>
+<Entity name="Servizio" X="1062" Y="250" >
+<Attribute name="Codice" type="integer" minCard="1" maxCard="1"/>
+<Attribute name="Titolo" type="varchar" minCard="1" maxCard="1" length="100"/>
+<Attribute name="Descrizione" type="varchar" minCard="1" maxCard="1" length="255"/>
+<Attribute name="Numero posti" type="integer" minCard="1" maxCard="1"/>
+<Attribute name="Costo" type="integer" minCard="1" maxCard="1"/>
+<Attribute name="Ora inizio" type="time" minCard="1" maxCard="1"/>
+<Attribute name="Data" type="date" minCard="1" maxCard="1"/>
+<Attribute name="Durata" type="time" minCard="1" maxCard="1"/>
+<Attribute name="Condiviso" type="boolean" minCard="1" maxCard="1"/>
+<Identifier name="X" attributes="Codice"/>
+</Entity>
+<Entity name="Utente" X="498" Y="594" >
+<Attribute name="CF" type="char" minCard="1" maxCard="1" length="16"/>
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="52"/>
+<Attribute name="Cognome" type="varchar" minCard="1" maxCard="1" length="52"/>
+<Attribute name="Data di nascita" type="date" minCard="1" maxCard="1"/>
+<Attribute name="Indirizzo di residenza" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="Email" type="varchar" minCard="1" maxCard="1" length="50"/>
+<Identifier name="X" attributes="CF"/>
+</Entity>
+<Entity name="Struttura" X="1281" Y="527" >
+<Attribute name="ID" type="integer" minCard="1" maxCard="1"/>
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="Indirizzo" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="Descrizione" type="varchar" minCard="0" maxCard="1" length="100"/>
+<Identifier name="X" attributes="ID"/>
+</Entity>
+<Entity name="Acquisto" X="1099" Y="715" >
+<Attribute name="ID" type="integer" minCard="1" maxCard="1"/>
+<Attribute name="Data" type="date" minCard="1" maxCard="1"/>
+<Identifier name="X" attributes="ID"/>
+</Entity>
+<Relationship name="Cooperazione" X="1111" Y="91">
+</Relationship>
+<Entity name="Professionista" X="1311" Y="27" >
+<Attribute name="CF" type="char" minCard="1" maxCard="1" length="16"/>
+<Attribute name="Telefono" type="varchar" minCard="1" maxCard="1" length="20"/>
+<Attribute name="Email" type="varchar" minCard="1" maxCard="1" length="50"/>
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="52"/>
+<Attribute name="Cognome" type="varchar" minCard="1" maxCard="1" length="52"/>
+<Attribute name="Data di nascita" type="date" minCard="1" maxCard="1"/>
+<Attribute name="Indirizzo" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="CAP" type="char" minCard="1" maxCard="1" length="5"/>
+<Identifier name="X" attributes="CF"/>
+</Entity>
+<Entity name="Disciplina" X="834" Y="522" >
+<Attribute name="ID" type="integer" minCard="1" maxCard="1"/>
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Identifier name="X" attributes="ID"/>
+</Entity>
+<Relationship name="Preferenza" X="834" Y="627">
+<Attribute name="Livello" type="varchar" minCard="1" maxCard="1" length="20"/>
+</Relationship>
+<Relationship name="Generazione" X="567" Y="901">
+</Relationship>
+<Relationship name="Esecuzione" X="861" Y="723">
+</Relationship>
+<Relationship name="Afferenza" X="1124" Y="902">
+</Relationship>
+<Relationship name="Tipologia" X="871" Y="410">
+</Relationship>
+<Relationship name="Utilizzo" X="1342" Y="429">
+</Relationship>
+<Entity name="Societa" X="812" Y="33" >
+<Attribute name="CF" type="char" minCard="1" maxCard="1" length="11"/>
+<Attribute name="Telefono" type="varchar" minCard="1" maxCard="1" length="20"/>
+<Attribute name="Email" type="varchar" minCard="1" maxCard="1" length="50"/>
+<Attribute name="Denominazione" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="Partita Iva" type="char" minCard="1" maxCard="1" length="11"/>
+<Attribute name="Tipo" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="Indirizzo" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="CAP" type="char" minCard="1" maxCard="1" length="5"/>
+<Identifier name="X" attributes="CF"/>
+</Entity>
+<Relationship name="Transazione" X="1116" Y="557">
+</Relationship>
+<Entity name="Account" X="526" Y="-149" >
+<Attribute name="Username" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Attribute name="Password" type="varchar" minCard="1" maxCard="1" length="30"/>
+<Identifier name="X" attributes="Username"/>
+</Entity>
+<Relationship name="Registrazione Utente" X="545" Y="426">
+</Relationship>
+<Entity name="Invito" X="802" Y="876" >
+<Attribute name="Codice" type="integer" minCard="1" maxCard="1"/>
+<Attribute name="Descrizione" type="varchar" minCard="1" maxCard="1" length="255"/>
+<Attribute name="Data esito" type="date" minCard="0" maxCard="1"/>
+<Attribute name="Esito" type="varchar" minCard="1" maxCard="1" length="10"/>
+<Identifier name="X" attributes="Codice"/>
+</Entity>
+<Relationship name="Utenza" X="363" Y="589">
+</Relationship>
+<Relationship name="Metodo" X="361" Y="678">
+</Relationship>
+<Entity name="Pagamento" X="276" Y="786" >
+<Attribute name="Numero carta" type="char" minCard="1" maxCard="1" length="16"/>
+<Attribute name="Nome Intestatario" type="varchar" minCard="1" maxCard="1" length="52"/>
+<Attribute name="Cognome Intestatario" type="varchar" minCard="1" maxCard="1" length="52"/>
+<Attribute name="Scandenza" type="char" minCard="1" maxCard="1" length="7"/>
+<Attribute name="CVC" type="char" minCard="1" maxCard="1" length="3"/>
+<Identifier name="X" attributes="Numero carta"/>
+</Entity>
+<Relationship name="Proposta Societa" X="858" Y="321">
+</Relationship>
+<Relationship name="Proposta professionista" X="1337" Y="334">
+</Relationship>
+<Relationship name="Registrazione Societa" X="838" Y="-73">
+</Relationship>
+<Relationship name="Registrazione Professionista" X="1320" Y="-142">
+</Relationship>
+<Entity name="Cellulare" X="312" Y="430" >
+<Attribute name="Numero" type="varchar" minCard="1" maxCard="1" length="20"/>
+<Identifier name="X" attributes="Numero"/>
+</Entity>
+<RelLink name="RelLink0" X="1025" Y="849" relationship="Cooperazione" entity="Professionista" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="369" Y="550" relationship="Preferenza" entity="Disciplina" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="633" Y="966" relationship="Esecuzione" entity="Acquisto" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="739" Y="653" relationship="Afferenza" entity="Acquisto" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="361" Y="706" relationship="Tipologia" entity="Servizio" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="363" Y="603" relationship="Tipologia" entity="Disciplina" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="1637" Y="837" relationship="Cooperazione" entity="Societa" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="144" Y="760" relationship="Transazione" entity="Acquisto" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="858" Y="524" relationship="Utilizzo" entity="Servizio" minCard="0" maxCard="1"/>
+<RelLink name="RelLink0" X="855" Y="426" relationship="Utilizzo" entity="Struttura" minCard="1" maxCard="N"/>
+<RelLink name="RelLink0" X="1022" Y="472" relationship="Transazione" entity="Servizio" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="730" Y="708" relationship="Registrazione Utente" entity="Account" minCard="0" maxCard="1"/>
+<RelLink name="RelLink0" X="1024" Y="862" relationship="Afferenza" entity="Invito" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="818" Y="1117" relationship="Generazione" entity="Invito" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="955" Y="730" relationship="Metodo" entity="Utente" minCard="1" maxCard="N"/>
+<RelLink name="RelLink0" X="683" Y="868" relationship="Metodo" entity="Pagamento" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="915" Y="749" relationship="Utenza" entity="Utente" minCard="1" maxCard="N"/>
+<RelLink name="RelLink0" X="511" Y="581" relationship="Proposta Societa" entity="Societa" minCard="1" maxCard="N"/>
+<RelLink name="RelLink0" X="891" Y="578" relationship="Proposta professionista" entity="Professionista" minCard="1" maxCard="N"/>
+<RelLink name="RelLink0" X="1027" Y="443" relationship="Proposta Societa" entity="Servizio" minCard="0" maxCard="1"/>
+<RelLink name="RelLink0" X="825" Y="776" relationship="Proposta professionista" entity="Servizio" minCard="0" maxCard="1"/>
+<RelLink name="RelLink0" X="730" Y="708" relationship="Registrazione Societa" entity="Account" minCard="0" maxCard="1"/>
+<RelLink name="RelLink0" X="765" Y="525" relationship="Registrazione Societa" entity="Societa" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="845" Y="572" relationship="Registrazione Professionista" entity="Professionista" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="621" Y="449" relationship="Registrazione Professionista" entity="Account" minCard="0" maxCard="1"/>
+<RelLink name="RelLink0" X="692" Y="791" relationship="Utenza" entity="Cellulare" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="1019" Y="972" relationship="Registrazione Utente" entity="Utente" minCard="1" maxCard="1"/>
+<RelLink name="RelLink0" X="1019" Y="972" relationship="Preferenza" entity="Utente" minCard="1" maxCard="N"/>
+<RelLink name="RelLink0" X="1019" Y="972" relationship="Esecuzione" entity="Utente" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="1019" Y="972" relationship="Generazione" entity="Utente" minCard="0" maxCard="N"/>
+<RelLink name="RelLink0" X="992" Y="373" relationship="Cooperazione" entity="Servizio" minCard="0" maxCard="1"/>
+<Note>
+{\rtf1\ansi
+{\fonttbl\f0\fnil Monospaced;\f1\fnil TimesRoman;}
+{\colortbl\red0\green0\blue0;\red51\green51\blue51;}
+
+\li0\ri0\fi0\f1\fs48\i0\b\ul0\cf1\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\fs36\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\li0\ri0\fi0\ul0\par
+}
+
+</Note>
+</ConceptualSchema>
+<RestructuredSchema>
+<Entity name="Servizio" X="1039" Y="324" >
+<Attribute name="Codice" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Titolo" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Descrizione" type="varchar" minCard="1" maxCard="1" length="100" solved="false"/>
+<Attribute name="Numero posti" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Costo" type="integer" minCard="1" maxCard="1" solved="false"/>
+<Attribute name="Ora inizio" type="time" minCard="1" maxCard="1" solved="false"/>
+<Attribute name="Ora fine" type="time" minCard="1" maxCard="1" solved="false"/>
+<Attribute name="Data" type="date" minCard="1" maxCard="1" solved="false"/>
+<Attribute name="Durata" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Condiviso" type="boolean" minCard="1" maxCard="1" solved="false"/>
+<Identifier name="X" attributes="Codice"/>
+</Entity>
+
+<Entity name="Utente" X="732" Y="580" >
+<Attribute name="CF" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Cognome" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Data di nascita" type="date" minCard="1" maxCard="1" solved="false"/>
+<Attribute name="Indirizzo di residenza" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Email" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Identifier name="X" attributes="CF"/>
+</Entity>
+
+<Entity name="Struttura" X="1361" Y="370" >
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Indirizzo" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Descrizione" type="varchar" minCard="0" maxCard="1" length="100" solved="false"/>
+<Identifier name="X" attributes="Nome, Indirizzo"/>
+</Entity>
+
+<Entity name="Acquisto" X="1089" Y="631" >
+<Attribute name="Data" type="date" minCard="1" maxCard="1" solved="false"/>
+</Entity>
+
+<Entity name="Professionista" X="811" Y="91" >
+<Attribute name="CF" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Telefono" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Email" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Cognome" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Data di nascita" type="date" minCard="1" maxCard="1" solved="false"/>
+<Attribute name="Indirizzo" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="CAP" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Identifier name="X" attributes="CF"/>
+</Entity>
+
+<Entity name="Disciplina" X="767" Y="386" >
+<Attribute name="Nome" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Identifier name="X" attributes="Nome"/>
+</Entity>
+
+<Entity name="Societa" X="1250" Y="77" >
+<Attribute name="CF" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Telefono" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Email" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Denominazione" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Partita Iva" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Tipo" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Indirizzo" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="CAP" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Identifier name="X" attributes="CF"/>
+</Entity>
+
+<Entity name="Account" X="589" Y="41" >
+<Attribute name="Username" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Attribute name="Password" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Identifier name="X" attributes="Username"/>
+</Entity>
+
+<Entity name="Invito" X="917" Y="731" >
+<Attribute name="Codice" type="varchar" minCard="1" maxCard="1" length="10" solved="false"/>
+<Attribute name="Descrizione" type="varchar" minCard="1" maxCard="1" length="100" solved="false"/>
+<Attribute name="Data rifiuto" type="date" minCard="0" maxCard="1" solved="false"/>
+<Attribute name="Data accettazione" type="date" minCard="0" maxCard="1" solved="false"/>
+<Attribute name="Esito" type="varchar" minCard="1" maxCard="1" length="10" solved="false"/>
+<Identifier name="X" attributes="Codice"/>
+</Entity>
+
+<Entity name="Telefono" X="489" Y="511" >
+<Attribute name="Numero" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Identifier name="X" attributes="Numero"/>
+</Entity>
+
+<Entity name="Pagamento" X="464" Y="634" >
+<Attribute name="Tipologia" type="varchar" minCard="1" maxCard="1" length="30" solved="false"/>
+<Identifier name="X" attributes="Tipologia"/>
+</Entity>
+
+<Relationship name="Cooperazione" X="917" Y="153">
+<Attribute name="Data di inizio" type="date" minCard="1" maxCard="1" solved="false"/>
+</Relationship>
+<Relationship name="Preferenza" X="738" Y="383">
+<Attribute name="Livello" type="varchar" minCard="1" maxCard="1" length="20" solved="false"/>
+</Relationship>
+<Relationship name="Generazione" X="747" Y="546">
+</Relationship>
+<Relationship name="Proposta" X="920" Y="230">
+</Relationship>
+<Relationship name="Esecuzione" X="848" Y="479">
+</Relationship>
+<Relationship name="Afferenza" X="953" Y="555">
+</Relationship>
+<Relationship name="Tipologia" X="832" Y="323">
+</Relationship>
+<Relationship name="Utilizzo" X="1029" Y="317">
+</Relationship>
+<Relationship name="Transazione" X="927" Y="409">
+</Relationship>
+<Relationship name="Registrazione Fornitore" X="901" Y="95">
+</Relationship>
+<Relationship name="Registrazione Utente" X="629" Y="245">
+</Relationship>
+<Relationship name="Utenza" X="650" Y="418">
+</Relationship>
+<Relationship name="Metodo" X="637" Y="468">
+</Relationship>
+</RestructuredSchema>
+</Project>

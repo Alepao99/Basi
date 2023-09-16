@@ -1,0 +1,173 @@
+DROP TABLE IF EXISTS Preferenza cascade; 
+DROP TABLE IF EXISTS Societa cascade;
+DROP TABLE IF EXISTS Professionista cascade;
+DROP TABLE IF EXISTS Account cascade; 
+DROP TABLE IF EXISTS PropostaSocieta cascade; 
+DROP TABLE IF EXISTS PropostaProfessionista cascade; 
+DROP TABLE IF EXISTS Utilizzo cascade; 
+DROP TABLE IF EXISTS Disciplina cascade; 
+DROP TABLE IF EXISTS Struttura cascade; 
+DROP TABLE IF EXISTS Cooperazione cascade; 
+DROP TABLE IF EXISTS Servizio cascade; 
+DROP TABLE IF EXISTS Acquisto cascade; 
+DROP TABLE IF EXISTS Utente cascade; 
+DROP TABLE IF EXISTS Cellulare cascade; 
+DROP TABLE IF EXISTS Pagamento cascade; 
+DROP TABLE IF EXISTS Invito cascade;
+DROP DOMAIN IF EXISTS TipoEsito cascade;
+DROP DOMAIN IF EXISTS TipoLivello cascade;
+
+
+create domain TipoEsito as varchar(10)
+check (value = 'Accettato' or value = 'Rifiutato' or value = 'In attesa');
+	
+create domain TipoLivello as varchar(20)
+check(value = 'Amatoriale' or value = 'Novizio' or value = 'Agonistico');
+
+create table Disciplina (
+	ID serial primary key,
+	Nome varchar(30) not NULL UNIQUE	
+);
+
+create table Account(
+	Username varchar(30)Primary Key,
+	Password varchar(30)not NULL
+);
+
+create table Societa(
+	CF char(11) Primary Key,
+	Telefono varchar(20) not NULL,
+	Email varchar(50) not NULL,
+	Denominazione varchar(30),
+	PartitaIva char (11) not NULL UNIQUE, 
+	Tipo varchar(30),
+	Indirizzo varchar(30),
+	CAP char(5) default '00000',
+	Username varchar(30) UNIQUE,
+	constraint Foreign_Societa Foreign Key (Username) references Account on update restrict on delete set NULL
+);
+
+create table Professionista(
+	CF char(16) Primary Key,
+	Telefono varchar(20) not NULL,
+	Email varchar(50) not NULL,
+	Nome varchar(52) not NULL, 
+	Cognome varchar(52) not NULL,
+	DataDiNascita date,
+	Indirizzo varchar(30),
+	CAP char(5) default '00000',
+	Username varchar(30) UNIQUE,
+	constraint Foreign_Professionista Foreign Key (Username) references Account on update restrict on delete set NULL
+);
+
+create table Utente(
+	CF char(16) Primary key,
+	Nome varchar(52) not NULL,
+	Cognome varchar(52) not NULL,
+	DataDiNascita date not NULL,
+	IndirizzoDiResidenza varchar(30) not NULL,
+	Email varchar(50) not NULL,
+	Username varchar(30) UNIQUE,
+	constraint Foreign_Utente foreign key(Username) references Account on update restrict on delete set NULL
+);
+
+create table Cellulare(
+	Numero varchar(20) Primary key,
+	Utente varchar(16) not NULL,
+	constraint Foreign_Cellulare foreign key (Utente) references Utente on update cascade on delete restrict 
+);
+
+
+create table Pagamento(
+	NumeroCarta char(16) Primary key,
+	NomeIntestatario varchar(52) not NULL,
+	CognomeIntestatario varchar(52) not NULL,
+	Scadenza char(7) not NULL,
+	CVC char(3) not null,
+	Utente char(16) not null,
+	constraint Foreign_Pagamento foreign key(Utente) references Utente on update cascade on delete restrict, 
+	constraint Check_Scadenza Check (Scadenza like '__/20__')
+);
+
+create table Servizio(
+	Codice serial primary key,
+	Titolo varchar(100) not NULL,
+	Descrizione varchar(255) not NULL,
+	NumeroPosti integer not NULL,
+	Costo decimal(6,2) not NULL,
+	Data date not NULL,
+	OraInizio time not NULL,
+	Durata time not NULL,
+	Condiviso boolean not NULL,
+	Disciplina integer not NULL,
+	constraint Key_Disciplina foreign key (Disciplina) references Disciplina on update restrict on delete restrict,
+	constraint CostoMaggioreDiZero CHECK (Costo > 0),
+	constraint NumeroPostiMaggioreDiZero CHECK(NumeroPosti > 0)
+);
+
+create table PropostaSocieta (
+	Servizio serial primary key,
+	Societa char(11) not NULL,
+	constraint Foreign_PropostaSocieta foreign key (Societa) references Societa on update cascade on delete restrict,
+	constraint Foreign_PropostaSocieta_Servizio foreign key (Servizio) references Servizio on update restrict on delete restrict
+);
+
+
+create table PropostaProfessionista (
+	Servizio serial primary key,
+	Professionista char(16) not NULL,
+	constraint Foreign_PropostaProfessionista foreign key (Professionista) references Professionista on update restrict on delete restrict,
+	constraint Foreign_PropostaProposta_Servizio foreign key (Servizio) references Servizio on update restrict on delete restrict
+);
+
+create table Struttura(
+	ID serial primary key,
+	Nome varchar(30) not NULL,
+	Indirizzo varchar(30) not NULL,
+	Descrizione varchar(100)
+);
+
+create table Utilizzo (
+	Servizio serial primary key,
+	Struttura integer not NULL,
+	constraint Foreign_Struttura foreign key (Struttura) references Struttura on update cascade on delete restrict,
+	constraint Foreign_StrutturaServizio foreign key (Servizio) references Servizio on update restrict on delete restrict
+);
+
+create table Cooperazione(
+	Servizio serial primary key,
+	Societa char(11) not NULL,
+	Professionista char(16) not NULL,
+	constraint Foreign_CooperazioneSocieta foreign key (Societa) references Societa on update cascade on delete restrict,
+	constraint Foreign_CooperazioneProfessionista foreign key (Professionista) references Professionista on update cascade on delete restrict,
+	constraint Foreign_CooperazioneServizio foreign key (Servizio) references Servizio on update restrict on delete restrict
+);
+
+create table Acquisto(
+	ID serial primary key,
+	Data date not NULL,
+	Servizio integer not NULL,
+	Utente char(16) not NULL,
+	constraint Key_Servizio foreign key (Servizio) references Servizio on update restrict on delete restrict,
+	constraint Key_Utente foreign key (Utente) references Utente on update cascade on delete restrict
+);
+
+create table Invito(
+	Codice serial Primary key,
+	Descrizione  varchar(255) not null,
+	DataEsito date,
+	Esito TipoEsito default 'In attesa',
+	Acquisto integer not null,
+	UtenteInvitato char(16) not null,
+	constraint Foreign_InvitoAcquisto foreign key(Acquisto) references Acquisto on update restrict on delete restrict,
+	constraint Foreign_InvitoUtente foreign key(UtenteInvitato) references Utente on update cascade on delete restrict 
+);
+
+create table Preferenza(
+	ID serial,
+	CF char(16),
+	Livello TipoLivello not NULL,
+	constraint Key_Preferenza Primary Key (ID,CF),
+	constraint Foreign_Preferenza_Disciplina Foreign Key (ID) references Disciplina on update restrict on delete restrict,
+	constraint Foreign_Preferenza_Utente Foreign Key (CF) references Utente on update cascade on delete cascade
+);
